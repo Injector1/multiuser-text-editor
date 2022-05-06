@@ -1,5 +1,5 @@
 import os
-import curses
+#import curses
 
 
 directory = './Files/'
@@ -32,14 +32,7 @@ def print_files(*args):
         print('*', file)
 
 
-commands = {
-    "exit": exit,
-    "edit": open_file,
-    "files": print_files,
-    "help": print_help_message
-    }
-
-if __name__ == "__main__":
+def main():
     clear_screen()
     print_help_message()
     while True:
@@ -51,3 +44,14 @@ if __name__ == "__main__":
             commands[command](content)
         else:
             print_help_message()
+
+
+commands = {
+    "exit": exit,
+    "edit": open_file,
+    "files": print_files,
+    "help": print_help_message
+    }
+
+if __name__ == "__main__":
+    main()
