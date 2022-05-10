@@ -9,7 +9,7 @@ class Editor:
 	def start(self, content):
 		screen = curses.initscr()
 		nw = curses.newwin(self.h, self.w, 0, 0)
-		self.text_box = curses.textpad.Textbox(nw)
+		self.text_box = curses.textpad.Textbox(nw, insert_mode=True)
 		nw.addstr(0, 0, content)
 		screen.refresh()
 

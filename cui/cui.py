@@ -40,9 +40,9 @@ def write_new_content(file_name, new_content):
 def edit_file(*args):
     file_name = args[0]
     file_content = open(directory + file_name, 'r', encoding='utf-8')
+    text = edit_file_with_curses("".join(file_content))
+    clear_screen()
     try:
-        text = edit_file_with_curses("".join(file_content))
-        clear_screen()
         write_new_content(file_name, text)
         print(f'File {file_name} was successfully edited!\n'
               'Enter any command to return to the menu')
