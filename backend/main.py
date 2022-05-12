@@ -5,20 +5,22 @@ from database import models, schemas, repository
 from connection_manager import ConnectionManager
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
-from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-
-models.Base.metadata.create_all(bind=engine)
-app = FastAPI()
-manager = ConnectionManager()
+from starlette.responses import FileResponse
 
 
 def get_db():
     db = SessionLocal()
     try:
-        yield db
+        return db
     finally:
         db.close()
+
+
+models.Base.metadata.create_all(bind=engine)
+app = FastAPI()
+db = get_db()
+manager = ConnectionManager(db)
 
 
 @app.get("/")
@@ -39,6 +41,6 @@ async def websocket_endpoint(websocket: WebSocket):
         await manager.broadcast(f"Client #{websocket_id} left the chat")
 
 
-@app.get("/users/", response_model=List[schemas.User])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return repository.get_users(db, skip=skip, limit=limit)
+@app.get('/files')
+def get_files():
+    return FileResponse('./files/first.txt', media_type='application/octet-stream', filename='first.txt')

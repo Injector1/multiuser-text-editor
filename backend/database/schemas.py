@@ -13,25 +13,9 @@ class FileCreate(FileBase):
 
 
 class File(FileBase):
-    id: int
+    id: str
     editor_id: int
 
     class Config:
         orm_mode = True
 
-
-class UserBase(BaseModel):
-    id: str
-
-
-class UserCreate(UserBase):
-    pass
-
-
-class User(UserBase):
-    id: int
-    is_active: bool
-    files: List[File] = []
-
-    class Config:
-        orm_mode = True

@@ -3,18 +3,22 @@ from typing import Tuple, Dict
 
 from py3crdt.gset import GSet
 from fastapi import WebSocket
+from sqlalchemy.orm import Session
+
+from database import repository
 
 
 class ConnectionManager:
-    def __init__(self):
+    def __init__(self, database_session: Session):
         self.active_connections: Dict[str, Tuple[GSet, WebSocket]] = {}
         self.current_text: GSet = GSet(id=1)
+        self.session = database_session
 
     async def connect(self, websocket: WebSocket):
-        websocket_id = str(uuid.uuid1())
+        user = repository.create_user(self.session)
         await websocket.accept()
-        self.active_connections[websocket_id] = (GSet(id=websocket_id), websocket)
-        return websocket_id
+        self.active_connections[user.id] = (GSet(id=user.id), websocket)
+        return user.id
 
     def disconnect(self, websocket_id: str):
         del self.active_connections[websocket_id]
