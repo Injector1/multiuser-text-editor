@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    command: pipenv startdev
+    networks:
+      - backend_network
+
+networks:
+  backend_network: {}

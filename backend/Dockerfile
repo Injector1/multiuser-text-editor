@@ -9,7 +9,7 @@ COPY ./Pipfile.lock /code/Pipfile.lock
 RUN pipenv install
 
 #
-COPY ./app /code/app
+COPY . /app
 
 #
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["pipenv", "startdev"]
