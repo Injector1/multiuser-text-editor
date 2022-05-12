@@ -1,13 +1,25 @@
 import uuid
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from database import SessionLocal, engine
+from database import models, schemas, repository
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
 from py3crdt.gset import GSet
 
+models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-current_text = GSet(id=uuid.uuid4())
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 class ConnectionManager:
     def __init__(self):
@@ -30,8 +42,8 @@ class ConnectionManager:
         text = GSet(id=uuid.uuid4())
         text.add(message)
 
-        current_text.merge(text)
-        print(current_text.display())
+        self.current_text.merge(text)
+        print(self.current_text.display())
         # for websocket_id in self.active_connections:
         #     print(websocket_id)
         #     if user_websocket_id == websocket_id:
@@ -42,7 +54,7 @@ class ConnectionManager:
         #     await self.current_text.merge(self.active_connections[websocket_id][0])
         #     print(*self.current_text.display())
         #     await self.active_connections[websocket_id][1].send_text(*self.current_text.display())
-        await self.active_connections[user_websocket_id][1].send_text(*current_text.display())
+        await self.active_connections[user_websocket_id][1].send_text(*self.current_text.display())
 
 
 manager = ConnectionManager()
@@ -64,3 +76,8 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket_id)
         await manager.broadcast(f"Client #{websocket_id} left the chat")
+
+
+@app.get("/users/", response_model=List[schemas.User])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return repository.get_users(db, skip=skip, limit=limit)

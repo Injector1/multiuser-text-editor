@@ -9,8 +9,13 @@ fastapi = "*"
 uvicorn = "*"
 websockets = "*"
 python3-crdt = "*"
+sqlalchemy = "*"
+pydantic = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.8"
+
+[scripts]
+startdev = 'uvicorn main:app'
