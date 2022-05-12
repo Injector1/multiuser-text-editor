@@ -1,16 +1,16 @@
-import uuid
-from typing import Tuple, Dict, List
+from typing import List
 
 from database import SessionLocal, engine
 from database import models, schemas, repository
+from connection_manager import ConnectionManager
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-from py3crdt.gset import GSet
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+manager = ConnectionManager()
 
 
 def get_db():
@@ -21,48 +21,9 @@ def get_db():
         db.close()
 
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: Dict[str, Tuple[GSet, WebSocket]] = {}
-        self.current_text: GSet = GSet(id=1)
-
-    async def connect(self, websocket: WebSocket):
-        websocket_id = str(uuid.uuid4())
-        await websocket.accept()
-        self.active_connections[websocket_id] = (GSet(id=websocket_id), websocket)
-        return websocket_id
-
-    def disconnect(self, websocket_id: str):
-        del self.active_connections[websocket_id]
-
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
-
-    async def broadcast(self, user_websocket_id: str, message: str):
-        text = GSet(id=uuid.uuid4())
-        text.add(message)
-
-        self.current_text.merge(text)
-        print(self.current_text.display())
-        # for websocket_id in self.active_connections:
-        #     print(websocket_id)
-        #     if user_websocket_id == websocket_id:
-        #         print("AAAA", self.active_connections[websocket_id][0].display())
-        #         user_message = self.active_connections[websocket_id][0].add(message)
-        #         print(user_message)
-        #     print(*self.current_text.display())
-        #     await self.current_text.merge(self.active_connections[websocket_id][0])
-        #     print(*self.current_text.display())
-        #     await self.active_connections[websocket_id][1].send_text(*self.current_text.display())
-        await self.active_connections[user_websocket_id][1].send_text(*self.current_text.display())
-
-
-manager = ConnectionManager()
-
-
 @app.get("/")
 async def get():
-    return FileResponse('main.html')
+    return FileResponse('static/main.html')
 
 
 @app.websocket("/ws/{client_id}")
