@@ -1,0 +1,7 @@
+bs4
+fastapi
+uvicorn
+websockets
+python3-crdt
+sqlalchemy
+pydantic

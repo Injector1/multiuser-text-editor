@@ -1,15 +1,11 @@
 
-FROM python:3.9
+FROM python:3.8
 
-WORKDIR /
+WORKDIR /app
+COPY ./requirements.txt ./app/
 
-COPY ./Pipfile /code/Pipfile
-COPY ./Pipfile.lock /code/Pipfile.lock
+RUN pip install --no-cache-dir --upgrade -r ./app/requirements.txt
 
-RUN pipenv install
+COPY . ./app
 
-#
-COPY . /app
-
-#
-CMD ["pipenv", "startdev"]
+CMD ["uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8080"]
