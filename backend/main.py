@@ -1,3 +1,5 @@
+import os
+import subprocess
 from typing import List
 
 from database import SessionLocal, engine
@@ -25,6 +27,9 @@ manager = ConnectionManager(db)
 
 @app.get("/")
 async def get():
+    file_name = 'first.txt'
+    file_content = "".join(open('./files/' + file_name, 'r', encoding='utf-8'))
+    os.system(" ".join(['python', '../cui/editor.py', file_name, file_content]))
     return FileResponse('static/main.html')
 
 
@@ -42,5 +47,5 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 @app.get('/files')
-def get_files():
+async def get_files():
     return FileResponse('./files/first.txt', media_type='application/octet-stream', filename='first.txt')
