@@ -7,6 +7,8 @@ from connection_manager import ConnectionManager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from sqlalchemy.orm import Session
 from starlette.responses import FileResponse
+from os import listdir
+from os.path import isfile, join
 
 
 def get_db():
@@ -28,19 +30,20 @@ async def get():
     return FileResponse('static/main.html')
 
 
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket):
-    websocket_id = await manager.connect(websocket)
-    print(websocket_id)
+@app.websocket("/ws/{client_id}&{file_name}")
+async def websocket_endpoint(websocket: WebSocket, client_id: str, file_name: str):
+    response = await manager.connect(websocket, client_id, file_name)
+    print(response)
     try:
         while True:
             data = await websocket.receive_text()
-            await manager.broadcast(websocket_id, f"{data}")
+            await manager.broadcast(file_name, data)
     except WebSocketDisconnect:
-        manager.disconnect(websocket_id)
-        await manager.broadcast(f"Client #{websocket_id} left the chat")
+        manager.disconnect(websocket)
+        await manager.broadcast(f"Client #{client_id} left the file editing")
 
 
 @app.get('/files')
 def get_files():
-    return FileResponse('./files/first.txt', media_type='application/octet-stream', filename='first.txt')
+    return {'files': [f for f in listdir('./files') if isfile(join('./files', f))]}
+

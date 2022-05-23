@@ -1,6 +1,6 @@
 var client_id = Date.now()
 document.querySelector("#ws-id").textContent = client_id;
-var ws = new WebSocket(`ws://localhost/ws/${client_id}`);
+var ws = new WebSocket(`ws://localhost/ws/${client_id}&first.txt`);
 ws.onmessage = function(event) {
     let messagesForm = document.getElementById('textarea1');
 
@@ -9,7 +9,11 @@ ws.onmessage = function(event) {
 };
 function sendMessage(event) {
     var input = document.getElementById("textarea1")
-    ws.send(input.value)
+	const currentOperation = {
+		type: 'insert',
+		value: input.value
+	}
+    ws.send(currentOperation)
     event.preventDefault()
 }
 

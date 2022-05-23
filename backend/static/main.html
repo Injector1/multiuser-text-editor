@@ -176,17 +176,22 @@
 	<script>
         let client_id = Date.now()
         document.querySelector("#ws-id").textContent = client_id;
-        let ws = new WebSocket(`ws://localhost:8000/ws/${client_id}`);
+        let ws = new WebSocket(`ws://localhost:8000/ws/${client_id}&first.txt`);
         ws.onmessage = function(event) {
             let messagesForm = document.getElementById('textarea1');
 
             let content = document.createTextNode(event.data);
+			console.log(content)
             messagesForm.value = content.textContent
         };
         function sendMessage(event) {
             let input = document.getElementById("textarea1")
-            ws.send(input.value)
-            event.preventDefault()
+			const currentOperation = {
+				type: 'insert',
+				value: input.value
+			}
+			ws.send(JSON.stringify(currentOperation))
+			event.preventDefault()
         }
 
         function f1() {
