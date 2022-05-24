@@ -1,5 +1,4 @@
 import os
-from text_editor_module import edit_file_with_curses
 from config import *
 
 
@@ -20,7 +19,7 @@ def clear_screen(*args):
 
 
 def open_file(*args):
-    file_name = args[0]
+    file_name = get_correct_name(args[0])
     if file_name in files:
         edit_file(file_name)
     else:
@@ -37,18 +36,20 @@ def write_new_content(file_name, new_content):
     file.close()
 
 
+def get_correct_name(*args):
+    return args[0] if '.' in args[0] else args[0] + '.txt'
+
+
 def edit_file(*args):
     file_name = args[0]
-    file_content = open(directory + file_name, 'r', encoding='utf-8')
     try:
-        text = edit_file_with_curses("".join(file_content))
+        os.system(" ".join(['python', '../cui/text_editor_module.py', file_name]))
         clear_screen()
-        write_new_content(file_name, text)
         print(f'File {file_name} was successfully edited!\n'
               'Enter any command to return to the menu')
     except:
+        clear_screen()
         print('Some Errors while editing file')
-        print(print_help_message())
 
 
 def print_files(*args):
@@ -69,7 +70,11 @@ commands = {
 if __name__ == "__main__":
     print_help_message()
     while True:
-        input_lines = input('\n/').split()
+        input_lines = input('\n/')
+        if len(input_lines) == 0:
+            print_help_message()
+            continue
+        input_lines = input_lines.split()
         command = input_lines[0]
         if command in commands.keys():
             content = "" if len(input_lines) == 1 else input_lines[1]
