@@ -11,7 +11,8 @@ function sendMessage(event) {
     var input = document.getElementById("textarea1")
 	const currentOperation = {
 		type: 'insert',
-		value: input.value
+		value: input.value,
+		cursor: {'x': 0, 'y': 0}
 	}
     ws.send(currentOperation)
     event.preventDefault()

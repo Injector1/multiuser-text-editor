@@ -179,8 +179,7 @@
         let ws = new WebSocket(`ws://localhost:8000/ws/${client_id}&first.txt`);
         ws.onmessage = function(event) {
             let messagesForm = document.getElementById('textarea1');
-
-            let content = document.createTextNode(event.data);
+            let content = document.createTextNode(JSON.parse(event.data).content);
 			console.log(content)
             messagesForm.value = content.textContent
         };
@@ -188,7 +187,8 @@
             let input = document.getElementById("textarea1")
 			const currentOperation = {
 				type: 'insert',
-				value: input.value
+				value: input.value,
+				cursor: {'x': 0, 'y': 0}
 			}
 			ws.send(JSON.stringify(currentOperation))
 			event.preventDefault()
