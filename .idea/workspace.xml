@@ -2,16 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f997e356-22cf-4e8c-bbe8-ef8c7d8df2f1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/joniv.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/connection_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/connection_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cui/Editor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/files/first.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/files/first.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cui/Files/first.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cui/Files/negr.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cui/Files/second.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cui/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cui/del.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cui/text_editor_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/text_editor_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cui/websocket.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/WebSocket.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,7 +40,6 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "D:/PycharmProjects/multiuser-text-editor"
   }
@@ -70,7 +81,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1653499796385</updated>
-      <workItem from="1653499797650" duration="338000" />
+      <workItem from="1653499797650" duration="526000" />
+      <workItem from="1653500329117" duration="7545000" />
     </task>
     <servers />
   </component>

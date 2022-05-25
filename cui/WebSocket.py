@@ -12,8 +12,11 @@ class WebSocket:
 
 	def send_message(self, message: str):
 		self.ws.send(json.dumps(
-			{'type': 'insert',
-			 'value': message}
+			{
+				'type': 'insert',
+				'value': message,
+				'cursor': {'x': 0, 'y': 0}
+			}
 		))
 
 	def close_connection(self):
