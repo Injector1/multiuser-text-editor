@@ -1,28 +1,15 @@
 from typing import List
 
-from database import SessionLocal, engine
-from database import models, schemas, repository
 from connection_manager import ConnectionManager
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
-from sqlalchemy.orm import Session
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from starlette.responses import FileResponse
 from os import listdir
 from os.path import isfile, join
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        return db
-    finally:
-        db.close()
-
-
-models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
-db = get_db()
-manager = ConnectionManager(db)
+manager = ConnectionManager()
 
 
 @app.get("/")
