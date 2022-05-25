@@ -1,22 +1,18 @@
 import uuid
-from typing import Tuple, Dict, List
+from typing import Dict, List
 from os import listdir
 from os.path import isfile, join
 import json
 
 from py3crdt.gset import GSet
 from fastapi import WebSocket
-from sqlalchemy.orm import Session
-
-from database import repository
 
 
 class ConnectionManager:
-    def __init__(self, database_session: Session):
+    def __init__(self):
         self.base_dir = './files'
         self.available_files = [f for f in listdir(self.base_dir) if isfile(join(self.base_dir, f))]
         self.active_connections: Dict[str, List[(WebSocket, str)]] = dict.fromkeys(self.available_files, [])
-        self.session = database_session
 
     async def connect(self, websocket: WebSocket, client_id: str, file_name: str):
         if file_name in self.available_files:
