@@ -1,11 +1,11 @@
-import uuid
 from typing import Dict, List
 from os import listdir
 from os.path import isfile, join
 import json
 
-from py3crdt.gset import GSet
 from fastapi import WebSocket
+
+from helpers import merge_file_content
 
 
 class ConnectionManager:
@@ -25,7 +25,6 @@ class ConnectionManager:
     def disconnect(self, websocket: WebSocket, client_id: str):
         for key in self.active_connections:
             if (websocket, client_id) in self.active_connections[key]:
-                print(self.active_connections[key][self.active_connections[key].index((websocket, client_id))])
                 del self.active_connections[key][self.active_connections[key].index((websocket, client_id))]
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
@@ -38,17 +37,8 @@ class ConnectionManager:
 
         for active_file in self.active_connections:
             if active_file == file_name:
-                with open(f'{self.base_dir}/{file_name}', 'w+') as file:
-                    file_content = GSet(id=str(uuid.uuid1()))
-                    user_additions = GSet(id=str(uuid.uuid1()))
-                    file_content.add(file.read())
-                    user_additions.add(serialized_json['value'])
-
-                    file_content.merge(user_additions)
-                    response['content'] = ''.join(file_content.payload)
-
-                    file.write(response['content'])
-                    for connection in self.active_connections[active_file]:
-                        await connection[0].send_text(json.dumps(response))
+                response['content'] = merge_file_content(f'{self.base_dir}/{file_name}', serialized_json['value'])
+                for connection in self.active_connections[active_file]:
+                    await connection[0].send_text(json.dumps(response))
 
 
