@@ -40,7 +40,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str, file_name: st
             await manager.broadcast(file_name, data)
     except WebSocketDisconnect:
         manager.disconnect(websocket, client_id)
-        print("Client left text editting")
+        print("Client left text editing")
 
 
 @app.get('/files')

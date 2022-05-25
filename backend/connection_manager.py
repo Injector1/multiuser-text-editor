@@ -19,11 +19,11 @@ class ConnectionManager:
         self.session = database_session
 
     async def connect(self, websocket: WebSocket, client_id: str, file_name: str):
-        print(self.active_connections)
         if file_name in self.available_files:
+            response = {'content': open(f'{self.base_dir}/{file_name}').read(), 'cursor': {'x': 0, 'y': 0}}
             await websocket.accept()
             self.active_connections[file_name].append((websocket, client_id))
-            await websocket.send_text(open(f'{self.base_dir}/{file_name}').read())
+            await websocket.send_text(json.dumps(response))
         return Exception('There is no such file')
 
     def disconnect(self, websocket: WebSocket, client_id: str):
@@ -37,10 +37,9 @@ class ConnectionManager:
 
     async def broadcast(self, file_name: str, data: str):
         serialized_json = json.loads(data)
-        # user_cursor = serialized_json['cursor']
+        user_cursor = serialized_json['cursor']
+        response = {'content': '', 'cursor': {'x': user_cursor['x'], 'y': user_cursor['y']}}
 
-
-        print(file_name, serialized_json)
         for active_file in self.active_connections:
             if active_file == file_name:
                 with open(f'{self.base_dir}/{file_name}', 'w+') as file:
@@ -50,9 +49,10 @@ class ConnectionManager:
                     user_additions.add(serialized_json['value'])
 
                     file_content.merge(user_additions)
-                    print(''.join(file_content.payload))
-                    file.write(''.join(file_content.payload))
+                    response['content'] = ''.join(file_content.payload)
+
+                    file.write(response['content'])
                     for connection in self.active_connections[active_file]:
-                        await connection[0].send_text(''.join(file_content.payload))
+                        await connection[0].send_text(json.dumps(response))
 
 
