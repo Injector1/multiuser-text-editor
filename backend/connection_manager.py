@@ -26,16 +26,19 @@ class ConnectionManager:
             await websocket.send_text(open(f'{self.base_dir}/{file_name}').read())
         return Exception('There is no such file')
 
-    def disconnect(self, websocket: WebSocket):
+    def disconnect(self, websocket: WebSocket, client_id: str):
         for key in self.active_connections:
-            if websocket in self.active_connections[key]:
-                del self.active_connections[key][self.active_connections[key].index(websocket)]
+            if (websocket, client_id) in self.active_connections[key]:
+                print(self.active_connections[key][self.active_connections[key].index((websocket, client_id))])
+                del self.active_connections[key][self.active_connections[key].index((websocket, client_id))]
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_text(message)
 
     async def broadcast(self, file_name: str, data: str):
         serialized_json = json.loads(data)
+        # user_cursor = serialized_json['cursor']
+
 
         print(file_name, serialized_json)
         for active_file in self.active_connections:
