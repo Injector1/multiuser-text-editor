@@ -5,6 +5,7 @@ import pyautogui
 from WebSocket import WebSocket
 from uuid import uuid1
 from config import *
+from multiprocessing import Process
 
 
 class Editor:
@@ -12,23 +13,36 @@ class Editor:
 		self.file_name = file_name
 		self.is_end = False
 		self.text = self.get_text_from_server()
+		self.ws = WebSocket(str(uuid1()), self.file_name)
+		self.cui = None
 
-		self.ws = WebSocket(str(uuid1()), file_name)
+	def run(self) -> None:
+		p1 = Process(target=self.start_session)
+		p2 = Process(target=self.update_local_text)
+
 		self.setup_hotkeys()
 
 		self.cui = curses.initscr()
-		self.cui.addstr(0, 0, self.text)
 
+		p1.start()
+		p2.start()
+
+		p1.join()
+		p2.join()
+
+	def start_session(self) -> None:
+		self.cui.addstr(0, 0, self.text)
 		while not self.is_end:
 			self.cui.refresh()
 			self.cui.clrtobot()
+
 			key = self.cui.getkey()
 			if key in '\b':
 				continue
 			if self.is_end:
 				break
 			self.add_text(key)
-			self.synchronize_data()
+			self.update_server_text()
 
 	def end_session(self) -> None:
 		self.is_end = True
@@ -134,12 +148,20 @@ class Editor:
 		for key, command in hotkeys.items():
 			keyboard.add_hotkey(key, command)
 
-	def synchronize_data(self) -> None:
-		self.ws.send_message(self.text)
-		sleep(0.1)
-		self.cui.addstr(0, 0, self.get_text_from_server())
-		self.cui.refresh()
-		sleep(0.01)
+	# def sync(self) -> None:
+	# 	self.update_local_text(self.get_text_from_server())
+	# 	self.update_server_text(self.text)
+
+	def update_server_text(self) -> None:
+		self.ws.send(self.text)
+		sleep(1)
+
+	def update_local_text(self, text: str) -> None:
+		while not self.is_end:
+			self.cui.addstr(0, 0, text)
+			sleep(0.1)
+			self.cui.refresh()
+			sleep(1)
 
 	def get_text_from_server(self) -> str:
 		with open(directory + self.file_name, 'r', encoding='utf-8') as f:

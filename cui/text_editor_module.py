@@ -3,7 +3,8 @@ from Editor import Editor
 
 
 def edit_file(file: str):
-	Editor(file)
+	editor = Editor(file)
+	editor.run()
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ class WebSocket:
 		self.ws = websocket.WebSocket()
 		self.ws.connect(f'{host}{client_id}&{file_name}')
 
-	def send_message(self, message: str):
+	def send(self, message: str):
 		self.ws.send(json.dumps(
 			{
 				'type': 'insert',
