@@ -4,8 +4,6 @@
     <list default="true" id="f997e356-22cf-4e8c-bbe8-ef8c7d8df2f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cui/Editor.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/Editor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cui/WebSocket.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/WebSocket.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cui/text_editor_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/text_editor_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +36,7 @@
     &quot;last_opened_file_path&quot;: &quot;D:/PycharmProjects/multiuser-text-editor&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.text_editor_module">
     <configuration name="del" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="multiuser-text-editor" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -61,8 +59,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="text_editor_module" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="multiuser-text-editor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cui" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cui/text_editor_module.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.text_editor_module" />
         <item itemvalue="Python.del" />
       </list>
     </recent_temporary>
@@ -77,6 +98,9 @@
       <updated>1653499796385</updated>
       <workItem from="1653499797650" duration="526000" />
       <workItem from="1653500329117" duration="7545000" />
+      <workItem from="1653903052059" duration="4000" />
+      <workItem from="1654008639878" duration="596000" />
+      <workItem from="1654098012506" duration="7496000" />
     </task>
     <servers />
   </component>
@@ -96,6 +120,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/multiuser_text_editor$curses.coverage" NAME="curses Coverage Results" MODIFIED="1651843794984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/curses" />
+    <SUITE FILE_PATH="coverage/multiuser_text_editor$text_editor_module.coverage" NAME="text_editor_module Coverage Results" MODIFIED="1654104898051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cui" />
     <SUITE FILE_PATH="coverage/multiuser_text_editor$curses_module.coverage" NAME="curses-module Coverage Results" MODIFIED="1651849647018" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/curses-module" />
     <SUITE FILE_PATH="coverage/multiuser_text_editor$main.coverage" NAME="websocket Coverage Results" MODIFIED="1653417893980" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/multiuser_text_editor$editor.coverage" NAME="editor Coverage Results" MODIFIED="1652725064364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/cui" />
