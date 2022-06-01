@@ -101,6 +101,7 @@ class Editor:
 			changed_text[x - 1] = ''
 			if y > 0:
 				self.text = self.build_text(''.join(changed_text), y)
+
 			else:
 				self.text = ''.join(changed_text) + '\n' + \
 				            '\n'.join(self.text.split('\n')[y + 1:])
@@ -151,7 +152,9 @@ class Editor:
 		self.cui.refresh()
 
 	def get_text_from_server(self) -> str:
-		with open(directory + self.file_name, 'r', encoding='utf-8') as f:
+		with open(
+				directory + self.file_name, 'r', encoding='utf-8'
+		) as f:
 			return "".join(f)
 
 	def update_server_text(self) -> None:

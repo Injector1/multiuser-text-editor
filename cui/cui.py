@@ -43,11 +43,14 @@ def get_correct_name(*args):
 def edit_file(*args):
     file_name = args[0]
     try:
-        os.system(" ".join(['python', '../cui/text_editor_module.py', file_name]))
+        os.system(
+            " ".join(
+                ['python', '../cui/text_editor_module.py', file_name]
+            ))
         clear_screen()
         print(f'File {file_name} was successfully edited!\n'
               'Enter any command to return to the menu')
-    except:
+    except Exception:
         clear_screen()
         print('Some Errors while editing file')
 
