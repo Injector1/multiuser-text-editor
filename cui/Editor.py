@@ -10,7 +10,7 @@ class Editor:
 	def __init__(self, file_name: str):
 		self.file_name = file_name
 		self.is_end = False
-		self.text = "".join(open(directory + self.file_name, 'r', encoding='utf-8'))
+		self.text = self.get_text_from_server()
 		self.ws = WebSocket(str(uuid1()), self.file_name)
 		self.cui = None
 
@@ -19,6 +19,7 @@ class Editor:
 		self.start_session()
 
 	def on_press(self, key: Key):
+		self.update_local_text()
 		if key == Key.esc:
 			self.end_session()
 			return False
@@ -59,25 +60,66 @@ class Editor:
 		self.ws.close_connection()
 		curses.endwin()
 
+	def build_text(self, changed_line: str, index: int) -> str:
+		s = ""
+		t = self.text.split('\n')
+		for i in range(len(t)):
+			if i == index:
+				s += changed_line
+			else:
+				s += t[i]
+			if i + 1 != len(t):
+				s += '\n'
+			else:
+				s += ''
+		return s
+
 	def add_text(self, key: str) -> None:
 		y, x = self.cui.getyx()
 		while len(list(self.text.split('\n'))) <= y:
 			self.text += '\n'
-
 		changed_line = list(self.text.split('\n')[y])
 		changed_line.insert(x, key)
-		changed_line = ''.join(changed_line)
 
 		if y > 0:
-			self.text = '\n'.join(self.text.split('\n')[:y]) + \
-			            '\n' + changed_line + \
-			            '\n'.join(self.text.split('\n')[y + 1:])
+			self.text = self.build_text(''.join(changed_line), y)
 		else:
-			self.text = changed_line + '\n' + \
+			self.text = ''.join(changed_line) + '\n' + \
 			            '\n'.join(self.text.split('\n')[1:])
 
 		self.cui.addstr(0, 0, self.text)
 		self.cui.refresh()
+		if key == '\n':
+			self.move_mouse(y + 1, 0)
+		else:
+			self.move_mouse(y, x + 1)
+
+	def delete_left_symbol(self) -> None:
+		y, x = curses.getsyx()
+		if x > 0:
+			changed_text = list(self.text.split('\n')[y])
+			changed_text[x - 1] = ''
+			if y > 0:
+				self.text = self.build_text(''.join(changed_text), y)
+			else:
+				self.text = ''.join(changed_text) + '\n' + \
+				            '\n'.join(self.text.split('\n')[y + 1:])
+			self.cui.addstr(0, 0, self.text)
+			self.cui.refresh()
+			self.move_mouse(y, x - 1)
+
+	def delete_right_symbol(self) -> None:
+		y, x = self.cui.getyx()
+		changed_text = list(self.text.split('\n')[y])
+		changed_text[x] = ''
+		if y > 0:
+			self.text = self.build_text(''.join(changed_text), y)
+		else:
+			self.text = ''.join(changed_text) + '\n' + \
+			            '\n'.join(self.text.split('\n')[y + 1:])
+		self.cui.addstr(0, 0, self.text)
+		self.cui.refresh()
+		self.move_mouse(y, x)
 
 	def move_mouse_up(self) -> None:
 		y, x = self.cui.getyx()
@@ -86,10 +128,9 @@ class Editor:
 
 	def move_mouse_down(self) -> None:
 		y, x = self.cui.getyx()
-		if len(self.text.split('\n')) < y + 3:
-			self.text += '\n'
-		self.cui.move(y + 1, len(self.text.split('\n')[y + 1]))
-		self.cui.refresh()
+		if len(self.text.split('\n')) < y + 2:
+			self.add_text('\n')
+		self.move_mouse(y + 1, len(self.text.split('\n')[y + 1]))
 
 	def move_mouse_left(self) -> None:
 		y, x = self.cui.getyx()
@@ -104,38 +145,14 @@ class Editor:
 		self.cui.move(y, x)
 		self.cui.refresh()
 
-	def delete_left_symbol(self) -> None:
-		y, x = curses.getsyx()
-		if x > 0:
-			changed_text = list(self.text.split('\n')[y])
-			changed_text[x - 1] = ''
-			if y > 0:
-				self.text = '\n'.join(self.text.split('\n')[:y]) + \
-				            '\n' + ''.join(changed_text) + '\n'
-				if len(self.text.split('\n')) > y:
-					self.text += '\n'.join(self.text.split('\n')[y + 1:])
-			else:
-				self.text = ''.join(changed_text) + '\n' + \
-				            '\n'.join(self.text.split('\n')[y + 1:])
-			self.cui.addstr(0, 0, self.text)
-			self.cui.refresh()
-			self.move_mouse(y, x - 1)
-
-	def delete_right_symbol(self) -> None:
-		y, x = self.cui.getyx()
-		changed_text = list(self.text.split('\n')[y])
-		changed_text[x] = ''
-		if y > 0:
-			self.text = '\n'.join(self.text.split('\n')[:y]) + \
-			            '\n' + ''.join(changed_text) + '\n' + \
-			            '\n'.join(self.text.split('\n')[y + 1:])
-		else:
-			self.text = ''.join(changed_text) + '\n' + \
-			            '\n'.join(self.text.split('\n')[y + 1:])
-		self.cui.refresh()
+	def update_local_text(self) -> None:
+		self.text = self.get_text_from_server()
 		self.cui.addstr(0, 0, self.text)
 		self.cui.refresh()
-		self.move_mouse(y, x)
+
+	def get_text_from_server(self) -> str:
+		with open(directory + self.file_name, 'r', encoding='utf-8') as f:
+			return "".join(f)
 
 	def update_server_text(self) -> None:
 		self.ws.send(self.text)
