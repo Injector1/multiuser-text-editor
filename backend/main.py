@@ -18,7 +18,9 @@ async def get():
 
 
 @app.websocket("/ws/{client_id}&{file_name}")
-async def websocket_endpoint(websocket: WebSocket, client_id: str, file_name: str):
+async def websocket_endpoint(
+        websocket: WebSocket, client_id: str, file_name: str
+):
     response = await manager.connect(websocket, client_id, file_name)
     print(response)
     try:
@@ -32,5 +34,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str, file_name: st
 
 @app.get('/files')
 def get_files():
-    return {'files': [f for f in listdir('./files') if isfile(join('./files', f))]}
-
+    return {
+        'files': [f for f in listdir('./files') if isfile(join('./files', f))]
+    }

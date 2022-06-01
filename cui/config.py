@@ -2,7 +2,8 @@ all_commands = 'Welcome to online Text Editor!\n\n' \
                'Available commands:\n' \
                '    /files - get all available file names\n' \
                '    /edit filename.txt - to edit filename.txt ' \
-               '[If requested file doesnt exist, it will be created]\n' \
+               '[If requested file doesnt exist,' \
+               ' it will be created]\n' \
                '    /help - get help message\n' \
                '    /exit - to terminate program\n' \
                'For closing editing window press ESCAPE'
