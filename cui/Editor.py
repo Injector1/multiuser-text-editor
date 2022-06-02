@@ -1,6 +1,7 @@
 from WebSocket import WebSocket
 from config import *
 
+import pyperclip
 import curses
 from uuid import uuid1
 from pynput.keyboard import Key, Listener
@@ -43,6 +44,9 @@ class Editor:
 			self.update_server_text()
 		elif key == Key.enter:
 			self.add_text('\n')
+			self.update_server_text()
+		elif key == Key.alt_l:
+			self.add_text(pyperclip.paste())
 			self.update_server_text()
 		elif "'" in str(key):
 			self.add_text(str(key)[1])
@@ -100,8 +104,10 @@ class Editor:
 			changed_text = list(self.text.split('\n')[y])
 			changed_text[x - 1] = ''
 			if y > 0:
-				self.text = self.build_text(''.join(changed_text), y)
-
+				self.text = '\n'.join(self.text.split('\n')[:y]) + \
+				            '\n' + ''.join(changed_text) + '\n'
+				if len(self.text.split('\n')) > y:
+					self.text += '\n'.join(self.text.split('\n')[y + 1:])
 			else:
 				self.text = ''.join(changed_text) + '\n' + \
 				            '\n'.join(self.text.split('\n')[y + 1:])
@@ -114,10 +120,13 @@ class Editor:
 		changed_text = list(self.text.split('\n')[y])
 		changed_text[x] = ''
 		if y > 0:
-			self.text = self.build_text(''.join(changed_text), y)
+			self.text = '\n'.join(self.text.split('\n')[:y]) + \
+			            '\n' + ''.join(changed_text) + '\n' + \
+			            '\n'.join(self.text.split('\n')[y + 1:])
 		else:
 			self.text = ''.join(changed_text) + '\n' + \
 			            '\n'.join(self.text.split('\n')[y + 1:])
+		self.cui.refresh()
 		self.cui.addstr(0, 0, self.text)
 		self.cui.refresh()
 		self.move_mouse(y, x)
@@ -148,7 +157,6 @@ class Editor:
 
 	def update_local_text(self) -> None:
 		self.text = self.get_text_from_server()
-		self.cui.addstr(0, 0, self.text)
 		self.cui.refresh()
 
 	def get_text_from_server(self) -> str:

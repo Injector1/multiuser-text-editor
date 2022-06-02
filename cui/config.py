@@ -6,7 +6,9 @@ all_commands = 'Welcome to online Text Editor!\n\n' \
                ' it will be created]\n' \
                '    /help - get help message\n' \
                '    /exit - to terminate program\n' \
-               'For closing editing window press ESCAPE'
+               '\n' \
+               '* Press [ESCAPE] for close edit window\n' \
+               '* Press [Alt_L] for paste text'
 
 creating_file = 'Are you sure you want to create new file?\n' \
                 'Enter [Y/N] to confirm operation\n: '
