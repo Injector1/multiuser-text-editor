@@ -118,7 +118,10 @@ class Editor:
 	def delete_right_symbol(self) -> None:
 		y, x = self.cui.getyx()
 		changed_text = list(self.text.split('\n')[y])
-		changed_text[x] = ''
+		if len(changed_text) > x:
+			changed_text[x] = ''
+		else:
+			return
 		if y > 0:
 			self.text = '\n'.join(self.text.split('\n')[:y]) + \
 			            '\n' + ''.join(changed_text) + '\n' + \

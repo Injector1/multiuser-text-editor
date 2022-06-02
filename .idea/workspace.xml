@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f997e356-22cf-4e8c-bbe8-ef8c7d8df2f1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/files/first.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/files/first.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cui/Editor.py" beforeDir="false" afterPath="$PROJECT_DIR$/cui/Editor.py" afterDir="false" />
     </list>
